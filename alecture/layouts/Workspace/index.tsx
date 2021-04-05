@@ -1,9 +1,12 @@
 import React,{ FC, useCallback } from 'react'
+import { Redirect } from 'react-router';
 import axios from 'axios';
 import useSWR, { mutate } from 'swr';
+import gravatar from 'gravatar';
 
 import fetcher from '@utils/fetcher';
-import { Redirect } from 'react-router';
+
+import { Header, ProfileImg, RightMenu, WorkspaceWrapper ,Workspaces, WorkspaceName, Channels, Chats, MenuScroll } from './styles';
 
 const Workspace:FC = ({children}) => { //VFC는 children을 안쓰는 컴포넌트의 타입, FC는 children을 쓰는 컴포넌트의 타입
     const {data,error,revalidate,mutate} = useSWR('http://localhost:3095/api/users', fetcher,{
@@ -33,8 +36,25 @@ const Workspace:FC = ({children}) => { //VFC는 children을 안쓰는 컴포넌�
     }
     return (
         <div>
+            <Header>
+                <RightMenu>
+                    <span>
+                        <ProfileImg src={gravatar.url(data.nickname, {s:'28px', d:'retro' }) } alt={data.nickname} />
+                    </span>
+                </RightMenu>
+            </Header>
             <button onClick={onLogout}>로그아웃</button>
-            {children}
+            <WorkspaceWrapper> 
+                <Workspaces>test</Workspaces>
+                <Channels>
+                    <WorkspaceName>Sleact</WorkspaceName>
+                    <MenuScroll>
+                        MenuScroll
+                    </MenuScroll>
+                </Channels>
+                <Chats>chats</Chats>
+            </WorkspaceWrapper>
+            {/* {children} */}
         </div>
     )
 }
