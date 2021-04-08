@@ -59,7 +59,7 @@ const SignUp = () => {
     }
 
     if(data) { // 로그인을 하면 data가 false에서 -> data에 로그인정보가 담아질때 함수 실행 / 로그인 상태에서 회원가입페이지로 들어오면 /workspace/channel 로 전환
-        return <Redirect to="/workspace/channel" />
+        return <Redirect to="/workspace/sleact/channel/일반" />
     }
 
     return (
