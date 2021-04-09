@@ -9,7 +9,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
 const SignUp = () => {
-    const {data,error,revalidate} = useSWR('http://localhost:3095/api/users', fetcher);
+    const {data,error,revalidate} = useSWR('/api/users', fetcher);
     const [email,onChangeEmail] = useInput(''); // custom Hooks, setValue 사용안하기 때문에 지움
     const [nickname, onChangeNickname] = useInput(''); // custom Hooks, setValue 사용안하기 때문에 지움
     const [password, _1, setPassword] = useInput(''); // useInput custom Hooks에서 순서가 value, handler, setValue 이다 handler는 따로 처리하기때문에 다른변수로 설정해주면된다. 단 겹치지 말것.
@@ -36,7 +36,7 @@ const SignUp = () => {
             setSignUpError('');
             setSignUpSuccess(false);
             // 비동기 요청할때 then, catch, finally에 setState를 하는 것들이 있다. 이런 것들을 비동기 요청하기 전에 초기화 해주고 요청하는게 좋음
-            axios.post('http://localhost:3095/api/users',{ // 'http://localhost:3095/api/users는 프론트서버 3090에서 3095로 보내는 것이고 만약 뒤에 http://localhost:3095가 없다면 3095에서 3095로 보내는 것이다(webpack devserver proxy설정)
+            axios.post('/api/users',{ // '/api/users는 프론트서버 3090에서 3095로 보내는 것이고 만약 뒤에 http://localhost:3095가 없다면 3095에서 3095로 보내는 것이다(webpack devserver proxy설정)
                 email,
                 nickname,
                 password

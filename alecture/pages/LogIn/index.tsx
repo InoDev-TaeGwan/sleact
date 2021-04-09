@@ -13,8 +13,8 @@ const LogIn = () => {
     // SWR은 get요청에 대한 정보를 저장한다.(redux를 대체하기 위해 사용)
     // get이 아닌 post요청도 저장이 가능하다. 통상적으로 get요청에 많이 사용
     // 로그인할때 post를 요청받는다면 get으로도 한번 더 요청!
-    const {data,error,revalidate,mutate} = useSWR('http://localhost:3095/api/users', fetcher);
-    // const {data,error,revalidate} = useSWR('http://localhost:3095/api/users', fetcher,{
+    const {data,error,revalidate,mutate} = useSWR('/api/users', fetcher);
+    // const {data,error,revalidate} = useSWR('/api/users', fetcher,{
     //     dedupingInterval:100000, // 100초마다 한번
     // });
     // 로그인 후 데이터를 전해줄 api, fetcher함수는 api를 어떻게할지 정해줌 url이 fetcher로 넘어감
@@ -32,7 +32,7 @@ const LogIn = () => {
         (e)=>{
             e.preventDefault();
             setLoginError(false);
-            axios.post("http://localhost:3095/api/users/login",{email, password},{
+            axios.post("/api/users/login",{email, password},{
                 withCredentials:true // 백엔드 서버와 프론트 서버의 포트번호가 달라서 쿠키전달이 안돼서 설정. post에서는 3번째에 넣을것.
             })
             .then((respone)=>{
