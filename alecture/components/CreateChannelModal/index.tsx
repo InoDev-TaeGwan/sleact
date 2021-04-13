@@ -11,7 +11,7 @@ import useSWR from 'swr';
 
 interface Props {
   show: boolean;
-  onCloseModal: () => void;
+  onCloseModal: (e:any) => void;
   setShowCreateChannelModal: (flag: boolean) => void;
 }
 const CreateChannelModal: VFC<Props> = ({ show, onCloseModal, setShowCreateChannelModal }) => {

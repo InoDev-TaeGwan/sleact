@@ -1,51 +1,45 @@
-import React,{ FC, useCallback } from 'react'
+import React, {FC, useCallback} from 'react'
+import Modal from "@components/Modal";
+import {Button, Input, Label} from "@pages/SignUp/styles";
+import {useParams} from "react-router-dom";
+import useInput from "@hooks/useInput";
+import useSWR from "swr";
+import fetcher from "@utils/fetcher";
+import {IChannel, IUser} from "@typings/db";
+import {toast} from "react-toastify";
+import axios from "axios";
 
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useParams } from 'react-router';
-import useSWR from 'swr';
-
-import { IChannel, IUser } from '@typings/db';
-import fetcher from '@utils/fetcher';
-
-import Modal from '@components/Modal'
-import useInput from '@hooks/useInput'
-import {Label, Input, Button} from '@pages/SignUp/styles';
-
-interface Props {
-    show: boolean
-    onCloseModal: () => void
-    setShowInviteWorkspaceModal:(flag:boolean) => void
+interface Props{
+    show:boolean;
+    onCloseModal:(e:any)=>void;
+    setShowInviteWorkspaceModal:(flag:boolean)=>void;
 }
 
-const InviteWorkspaceModal:FC<Props> = ({show, onCloseModal, setShowInviteWorkspaceModal}) => {
-    const {workspace} = useParams<{workspace:string, channel:string}>();
-    const [newMember, onChangeNewMember, setNewMember] = useInput('');
-    const {data: userData} = useSWR<IUser>('/api/users', fetcher);
-    const {revalidate: revalidateChannel} = useSWR<IChannel[]>(
+const InviteWorkspaceModal:FC<Props> = ({show,onCloseModal,setShowInviteWorkspaceModal}) => {
+    const {workspace} = useParams<{workspace:string, channel:string}>()
+    const [newMember,onChangeNewMember, setNewMember] = useInput('');
+    const {data:userData} = useSWR<IUser>('/api/users', fetcher);
+    const {revalidate: revalidateMember} = useSWR<IChannel[]>(
         userData ? `/api/workspaces/${workspace}/members` : null,
         fetcher,
     )
 
     const onInviteMember = useCallback((e)=>{
-            e.preventDefault();
-            if(!newMember || !newMember.trim()){ // input 검사
-                return;
-            }
-            axios.post(`/api/workspaces/${workspace}/members`, {
-                email:newMember
-            })
+        e.preventDefault();
+        if(!newMember || !newMember.trim()) return;
+        axios.post(`/api/workspaces/${workspace}/members`, {
+            email:newMember
+        })
             .then(()=> {
-                revalidateChannel();
+                revalidateMember();
                 setShowInviteWorkspaceModal(false);
                 setNewMember('');
             })
             .catch((error)=> {
                 console.dir(error);
-                toast.error(error.response?.data,{position:'bottom-center'});
+                toast.error(error.response?.data, {position:'bottom-center'});
             })
-        },[workspace, newMember]
-    )
+    },[workspace,newMember])
 
     return (
         <Modal show={show} onCloseModal={onCloseModal}>
