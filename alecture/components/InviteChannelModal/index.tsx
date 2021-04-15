@@ -19,7 +19,7 @@ const InviteChannelModal:FC<Props> = ({show,onCloseModal,setShowInviteChannelMod
     const [newMember, onchangeNewMemeber,setNewMember] = useInput('');
     const {data:userData} = useSWR<IUser>('/api/users',fetcher);
     const {revalidate:revalidateMembers} = useSWR<IUser[]>( // 특정 채널에있는 모든 멤버들을 가져옴
-        userData ? `/api/workspaces/${workspace}/channels/${channel}/members` : null, fetcher
+        userData && channel ? `/api/workspaces/${workspace}/channels/${channel}/members` : null, fetcher
     )
     const onInviteMember = useCallback((e)=>{
         e.preventDefault();
